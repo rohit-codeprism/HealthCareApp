@@ -6,10 +6,10 @@ import in.nit.rohit.entity.Specialization;
 
 public interface ISpecializationService {
 	
-	Integer saveSpecialization(Specialization specialization);
-	Specialization getOneSpecialization(Integer id);
+	Long saveSpecialization(Specialization specialization);
+	Specialization getOneSpecialization(Long id);
 	List<Specialization> getAllSpecialization();
-	void deleteSpecialization(Integer id);
+	void deleteSpecialization(Long id);
 	void UpdateSpecialization(Specialization specialization);
 	
 

@@ -17,13 +17,13 @@ public class SpecializationServiceImpl implements ISpecializationService {
 	private SpecializationRepository repo;
 
 	@Override
-	public Integer saveSpecialization(Specialization specialization) {
+	public Long saveSpecialization(Specialization specialization) {
 		
 		return repo.save(specialization).getId();
 	}
 
 	@Override
-	public Specialization getOneSpecialization(Integer id) {
+	public Specialization getOneSpecialization(Long id) {
 		Specialization specialization;
 		Optional<Specialization> opt = repo.findById(id);
 		if(opt.isPresent())
@@ -42,7 +42,7 @@ public class SpecializationServiceImpl implements ISpecializationService {
 	}
 
 	@Override
-	public void deleteSpecialization(Integer id) {
+	public void deleteSpecialization(Long id) {
 		repo.deleteById(id);
 		
 	}
@@ -52,5 +52,7 @@ public class SpecializationServiceImpl implements ISpecializationService {
 		repo.save(specialization);
 		
 	}
+
+	
 
 }

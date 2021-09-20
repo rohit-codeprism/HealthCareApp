@@ -15,7 +15,7 @@ import in.nit.rohit.entity.Specialization;
 import in.nit.rohit.service.ISpecializationService;
 
 @Controller
-@RequestMapping("/employee")
+@RequestMapping("/spec")
 public class SpecializationController {
 
 	@Autowired
@@ -23,6 +23,7 @@ public class SpecializationController {
 	
 	
 	/***
+	 * 	1.
 	 * if the user enters "/register" in addressbar 
 	 * then this method will be called and 
 	 * it will load the SpecializationRegister.html page data from /template folder
@@ -35,6 +36,7 @@ public class SpecializationController {
 	}
 	
 	/***
+	 * 2
 	 * on form submit(/save+POST), the form data will be collected using @ModelAttribute
 	 * call service layer with object, and REad id back
 	 * create String message using model memory 
@@ -45,7 +47,7 @@ public class SpecializationController {
 	@PostMapping("/save")
 	public String saveSpecialization(@ModelAttribute Specialization specialization, Model model)
 	{
-		Integer id = service.saveSpecialization(specialization);
+		Long id = service.saveSpecialization(specialization);
 		String message = "Specialization '"+id +"' Created";
 		model.addAttribute("message",message);
 		return "SpecializationRegister";
@@ -56,10 +58,11 @@ public class SpecializationController {
 	 * retun to SpecializationData.html
 	 */
 	@GetMapping("/all")
-	public String  viewAllSpecialization(Model model)
+	public String  viewAllSpecialization(Model model, @RequestParam(value="message", required=false) String message)
 	{
 		List<Specialization> list = service.getAllSpecialization();
 		model.addAttribute("list",list);
+		model.addAttribute("message",message);
 			
 		return "SpecializationData";
 	}
@@ -73,7 +76,7 @@ public class SpecializationController {
 	 * Return back to SpcializationData.html
 	 */
 	@GetMapping("/delete")
-	public String deleteSpecialization(@RequestParam Integer id, Model model)
+	public String deleteSpecialization(@RequestParam Long id, Model model)
 	{
 		// Call service
 		service.deleteSpecialization(id);
@@ -96,7 +99,7 @@ public class SpecializationController {
 	 * @return
 	 */
 	@GetMapping("/edit")
-	public String showEditPage(@RequestParam Integer id, Model model)
+	public String showEditPage(@RequestParam Long id, Model model)
 	{
 		//get one specialization...load objct from DB
 		Specialization specialization = service.getOneSpecialization(id);
