@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import in.nit.rohit.entity.Specialization;
 import in.nit.rohit.service.ISpecializationService;
@@ -23,10 +24,7 @@ public class SpecializationController {
 	
 	
 	/***
-	 * 	1.
-	 * if the user enters "/register" in addressbar 
-	 * then this method will be called and 
-	 * it will load the SpecializationRegister.html page data from /template folder
+	 * 	1. show Register page 
 	 */
 	
 	@GetMapping("/register")
@@ -36,12 +34,7 @@ public class SpecializationController {
 	}
 	
 	/***
-	 * 2
-	 * on form submit(/save+POST), the form data will be collected using @ModelAttribute
-	 * call service layer with object, and REad id back
-	 * create String message using model memory 
-	 * send back to UI
-	 * Return back to SpecializationRegister.html
+	 *2. On from submit save form data
 	 */
 	
 	@PostMapping("/save")
@@ -53,9 +46,7 @@ public class SpecializationController {
 		return "SpecializationRegister";
 	}
 	/***
-	 * Fetch date from DB using services
-	 * send data to UI using model
-	 * retun to SpecializationData.html
+	 * Display all Speialization
 	 */
 	@GetMapping("/all")
 	public String  viewAllSpecialization(Model model, @RequestParam(value="message", required=false) String message)
@@ -68,28 +59,19 @@ public class SpecializationController {
 	}
 	
 	/***
-	 * Read from request URL
-	 * call service for delete
-	 * get latest data
-	 * create success message 
-	 * send it ot UI using Model 
-	 * Return back to SpcializationData.html
+	 * Delete by Id
 	 */
 	@GetMapping("/delete")
-	public String deleteSpecialization(@RequestParam Long id, Model model)
+	public String deleteSpecialization(@RequestParam Long id, RedirectAttributes attributes)
 	{
 		// Call service
 		service.deleteSpecialization(id);
 		
 		// one success message 
-		String message = "Specialization '"+id+"' Deleted successfully";
-		model.addAttribute("message",message);
+		attributes.addAttribute("message","Specialization ("+id+") Deleted successfully");
 		
-		// Get latest data 
-		List<Specialization> list = service.getAllSpecialization();
-		model.addAttribute("list", list);
 		
-		return "SpecializationData";
+		return "redirect:all";
 		
 		
 	}
@@ -102,9 +84,9 @@ public class SpecializationController {
 	public String showEditPage(@RequestParam Long id, Model model)
 	{
 		//get one specialization...load objct from DB
-		Specialization specialization = service.getOneSpecialization(id);
+		Specialization spec = service.getOneSpecialization(id);
 		// sent it to UI
-		model.addAttribute("specialization", specialization);
+		model.addAttribute("specialization", spec);
 		
 		// send to UI
 		return "SpecializationEdit";
@@ -116,10 +98,11 @@ public class SpecializationController {
 	 * redirect  back to all
 	 */
 	@PostMapping("/update")
-	public String updateSpecialization(@ModelAttribute Specialization specialization)
+	public String updateSpecialization(@ModelAttribute Specialization specialization, RedirectAttributes attributes)
 	{
 		//as per servlet : req.getRequestDispatcher("/all")
 		service.UpdateSpecialization(specialization);
+		attributes.addFlashAttribute("message","Record ("+specialization.getId()+")is updated");
 		return "redirect:all";
 	}
 }

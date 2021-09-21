@@ -11,28 +11,30 @@
                <div class="card-header bg-primary  text-center text-white">
                   <h3>Specialization Data</h3>
                </div>
-               <div card="card-body">
+               <div class="card-body">
+               <a th:href="@{/spec/excel}" class="btn btn-success">Excel <i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
                    <table class="table table-hover">
-                       <tr>
-                           <td>ID</td>
-                           <td>CODE</td>
-                           <td>NAME</td>
-                           <td>NOTE</td>
-                           <td>OPERATION</td>
+                       <tr class="bg-info text-white">
+                           <th>ID</th>
+                           <th>CODE</th>
+                           <th>NAME</th>
+                           <th>NOTE</th>
+                           <th>OPERATION</th>
                        </tr>
-                       <tr  th:each="ob:${list}">
+                       <tr th:each="ob:${list}">
                              <td th:text="${ob.id}"></td>
                              <td th:text="${ob.specCode}"></td>
                              <td th:text="${ob.specName}"></td>
                              <td th:text="${ob.specNote}"></td>
                              <td>
-                                 <a href="#">DELETE</a>|<a href="#">EDIT</a>
+                                 <a th:href="@{/spec/delete(id=${ob.id})}" class="btn btn-dander">DELETE <i class="fa fa-trash" aria-hidden="true"></i></a>
+                                 <a th:href="@{/spec/edit/(id=${ob.id})}" class="btn btn-warning">EDIT <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                              </td>
                        </tr>
                    </table>
 
                </div>
-               <div card="card-footer bg-white text-success" th:if="${message != null}">
+               <div class="card-footer bg-white text-success" th:if="${message != null}">
                       <span th:text="${message}"></span>
                </div>
            </div>

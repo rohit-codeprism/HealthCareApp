@@ -20,7 +20,7 @@ public class Specialization {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="spee_id_col")
+	@Column(name="spec_id_col")
 	private Long id;
 	
 	@Column(
@@ -42,8 +42,7 @@ public class Specialization {
 	@Column(
 			name="spec_note_col",
 			length = 250,
-			nullable = false,
-			unique = true)
+			nullable = false)
 	private String specNote;
 	
 
