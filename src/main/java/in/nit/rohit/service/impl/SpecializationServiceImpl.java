@@ -1,14 +1,17 @@
 package in.nit.rohit.service.impl;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import in.nit.rohit.entity.Specialization;
+import in.nit.rohit.exception.SpecializationNotFoundException;
 import in.nit.rohit.repo.SpecializationRepository;
 import in.nit.rohit.service.ISpecializationService;
+import in.nit.rohit.view.SpecializationExcelView;
 
 @Service
 public class SpecializationServiceImpl implements ISpecializationService {
@@ -24,15 +27,17 @@ public class SpecializationServiceImpl implements ISpecializationService {
 
 	@Override
 	public Specialization getOneSpecialization(Long id) {
-		Specialization specialization;
+		/*
 		Optional<Specialization> opt = repo.findById(id);
 		if(opt.isPresent())
 		{
-			specialization = opt.get();
-			return specialization;
+			return opt.get();
+		}else {
+			throw new SpecializationNotFoundException(id+"Not Found");
 		}
-		// TODO: else if terurn exception 	
-		return null;
+		*/
+		return repo.findById(id).orElseThrow(()-> new SpecializationNotFoundException(id+"Not Found"));
+		
 	}
 
 	@Override
@@ -43,7 +48,8 @@ public class SpecializationServiceImpl implements ISpecializationService {
 
 	@Override
 	public void deleteSpecialization(Long id) {
-		repo.deleteById(id);
+		//repo.deleteById(id);
+		repo.delete(getOneSpecialization(id));
 		
 	}
 
@@ -53,6 +59,17 @@ public class SpecializationServiceImpl implements ISpecializationService {
 		
 	}
 
+	@Override
+	public boolean isSpecCodeExist(String specCode) {
+		
+		/*Integer count = repo.getSpecializationSpecCodeCount(specCode);
+		boolean exist = count>0 ? true:false;
+		return exist;
+		*/
+		return repo.getSpecializationSpecCodeCount(specCode)>0;
+	}
+	
+	
 	
 
 }

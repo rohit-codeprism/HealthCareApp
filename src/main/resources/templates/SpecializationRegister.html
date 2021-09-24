@@ -13,8 +13,8 @@
                 </div>
                 <div class="card-body">
                     <form th:action="@{/spec/save}" method="POST" id="specForm">
+                         <!--row#1--> 
                         <div class="row">
-                           <!--row#1--> 
                             <div class="col-2">
                               <label for="specCode">SpecCode</label>  
                             </div>
@@ -25,8 +25,8 @@
                                 <span id="specCodeError"></span>
                             </div>
                         </div>
+                         <!--row#2--> 
                         <div class="row">
-                            <!--row#1--> 
                               <div class="col-2">
                                 <label for="specName">SpecName</label>  
                               </div>
@@ -37,9 +37,8 @@
                                   <span id="specNameError"></span>
                               </div>
                         </div>
+                        <!--row#3-->
                         <div class="row">
-        
-                            <!--row#3-->
                             <div class="col-2">
                                 <label for="specNote">SpecNote</label>  
                               </div>
@@ -56,7 +55,7 @@
  
                 </div>
                 <div class="card-footer bg-white text-info" th:if="${message !=null}">
-                      <span th:text=${message}></span> 
+                      <span th:text="${message}"></span> 
                 </div>
             </div>
  
