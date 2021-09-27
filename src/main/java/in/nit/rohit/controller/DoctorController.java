@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import in.nit.rohit.entity.Doctor;
+import in.nit.rohit.exception.DoctorNotFoundException;
 import in.nit.rohit.service.IDoctorService;
 
 @Controller
@@ -22,8 +24,8 @@ public class DoctorController {
 	private IDoctorService service;
 	
 	/***
-	 * when user enter "/register" them this method will be called 
-	 *  it will load  form DoctorRegister.html from "/template" folder
+	 * 1. show Register page
+	 * @return
 	 */
 	@GetMapping("/register")
 	public String showDoctorRegister()
@@ -32,85 +34,101 @@ public class DoctorController {
 	}
 	
 	/***
-	 * on form submit(/save + POST), this will collect form data using @ModelAttribute 
-	 * Call service layer with object. and read the Id back
-	 * create a String message using model memory
-	 * sent it ti the UI
-	 * Return back to DoctorRegister.html page
+	 * 2. save on submit 
+	 * @param doctor
+	 * @param model
+	 * @return
 	 */
-	public String saveDoctor(@ModelAttribute Doctor doctor, Model model)
+	@PostMapping("/save")
+	public String saveDoctor(@ModelAttribute Doctor doctor, RedirectAttributes attributes)
 	{
-		Integer id = service.saveDoctor(doctor);
+		Long id = service.saveDoctor(doctor);
 		String message = "Doctor '"+id+"' Created successfully";
-		model.addAttribute("message", model);
+		attributes.addAttribute("message", message);
 	    return "DoctorRegister";	
 	}
 	
 	/***
-	 * fetch Data from DB using services
-	 * send data to UI using Model
-	 * Return to DoctorData.html
+	 * 3. Display Data
+	 * @param model
+	 * @return
 	 */
 	@GetMapping("/all")
-	public String getAllEmployee(Model model)
+	public String getAllEmployee(Model model, @RequestParam(value = "message",required = false)String message)
 	{
 		List<Doctor> list = service.getAllDoctors();
 		model.addAttribute("list",list);
+		model.addAttribute("message", message);
 		return "DoctorData";
 	}
 	
 	/***
-	 * Read from request URL
-	 * Call service for Delete 
-	 * get latest data 
-	 * create success message 
-	 * send it to UI using model memory 
-	 * Return back to DoctorData.html
-	 * 
+	 * 4. Delete by Id
+	 * @param id
+	 * @param model
+	 * @return
 	 */
 	@GetMapping("/delete")
-	public String deleteDoctor(@RequestParam Integer id, Model model)
+	public String deleteDoctor(@RequestParam("id") Long id, Model model,RedirectAttributes attributes)
 	{
-		// call service to delete the employee
-		service.deleteDoctor(id);
-		// create a message 
-		String message = "Doctor '"+id+"' Deleted successfully";
-		model.addAttribute("message",message);
+		String message = null;
+		try {
+			service.deleteDoctor(id);
+		    message = "Doctor '"+id+"' Deleted successfully";
+		}catch(DoctorNotFoundException e)
+		{
+			e.printStackTrace();
+			message = e.getMessage();
+		}
 		
-		// get latest data
-		List<Doctor> doctor = service.getAllDoctors();
-		model.addAttribute("doctor",doctor);
-		
-		// return to UI
-		return "DoctorData";
+		attributes.addAttribute("message", message);
+		    return "redirect:DoctorData";
 	}
 	
 	/***
-	 * show edit page
+	 * 5. Show edit Page
+	 * @param id
+	 * @param model
 	 * @return
 	 */
 	@GetMapping("/edit")
-	public String showEditPage(@RequestParam Integer id, Model model)
+	public String showEditPage(@RequestParam("id") Long id, Model model, RedirectAttributes attributes)
 	{
-		// Get one doctor....Load it from DB
-		Doctor doctor = service.getOneDoctor(id);
-		// send it to UI
-		model.addAttribute("doctor",doctor);
-		// show Doctor Edit page
-		return "DoctorEdit";
+		String page = null;
+		try {
+			Doctor doctor = service.getOneDoctor(id);
+			model.addAttribute("doctor",doctor);
+			page = "DoctorEdit";	
+		}catch(DoctorNotFoundException e)
+		{
+			e.printStackTrace();
+			attributes.addAttribute("message", e.getMessage());
+			page = "redirect:all";	
+		}
+		
+		return page;
 	}
 	
-	
-	/***
-	 * To do update Read data from UI page using ModelAttribute 
-	 * call service to update the doctor 
-	 * redirect to DoctorData page
-	 */
+   /***
+    * 6. Do update
+    * @param doctorn
+    * @return
+    */
 	
 	@PostMapping("/update")	
-	public String updateDoctor(@ModelAttribute Doctor doctorn)
+	public String updateDoctor(@ModelAttribute Doctor doctor,RedirectAttributes attributes)
 	{
-		// as per the servlet: req.getRequestDispatcher("/all")
+		service.updateDoctor(doctor);
+		attributes.addAttribute("message", doctor.getId()+",Updated");
 		return "redirect:all";
 	}
+	
+	/***
+	 * 6. Email and Mobile duplicate Validate(Ajax)
+	 */
+	
+	/***
+	 * 7. excel export
+	 * 
+	 */
 }

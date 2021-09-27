@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import in.nit.rohit.entity.Doctor;
+import in.nit.rohit.exception.DoctorNotFoundException;
 import in.nit.rohit.repo.DoctorRepository;
 import in.nit.rohit.service.IDoctorService;
 
@@ -17,21 +18,23 @@ public class DoctorServiceImpl implements IDoctorService {
 	private DoctorRepository repo;
 	
 	@Override
-	public Integer saveDoctor(Doctor doctor) {
+	public Long saveDoctor(Doctor doctor) {
 		
 		return repo.save(doctor).getId();
 	}
 
 	@Override
-	public Doctor getOneDoctor(Integer id) {
+	public Doctor getOneDoctor(Long id) {
+		/*
 		Optional<Doctor> opt = repo.findById(id);
 		if(opt.isPresent())
 		{
 			Doctor doctor = opt.get();
 			return doctor;
 		}
-		// TODO: else show the exception that Doctor is not present 
-		return null;
+		// TODO: else show the exception that Doctor is not present
+		 * */
+		return repo.findById(id).orElseThrow(()-> new DoctorNotFoundException(id+", not exist"));
 	}
 
 	@Override
@@ -41,14 +44,18 @@ public class DoctorServiceImpl implements IDoctorService {
 	}
 
 	@Override
-	public void deleteDoctor(Integer id) {
+	public void deleteDoctor(Long id) {
 		repo.deleteById(id);
 		
 	}
 
 	@Override
 	public void updateDoctor(Doctor doctor) {
+		if(repo.existsById(doctor.getId()))
 		repo.save(doctor);
+		
+		else throw new DoctorNotFoundException(doctor.getId()+",not exist ");
+		
 		
 	}
 

@@ -42,7 +42,7 @@ public class SpecializationExcelView extends AbstractXlsView {
 		{
 			Row row = sheet.createRow(rowNum++);
 			row.createCell(0).setCellValue(spec.getId());
-			row.createCell(1).setCellValue(spec.getSpaceCode());
+			row.createCell(1).setCellValue(spec.getSpecCode());
 			row.createCell(2).setCellValue(spec.getSpecName());
 			row.createCell(3).setCellValue(spec.getSpecNote());
 		}

@@ -28,7 +28,7 @@ public class Specialization {
 			length = 10, 
 			nullable = false, 
 			unique = true)
-	private String spaceCode;
+	private String specCode;
 	
 	@Column(
 			name="spec_name_col",

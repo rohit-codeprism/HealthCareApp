@@ -27,9 +27,16 @@ $(document).ready(function(){
                       specCodeError = false;  
                   }
                   else{
+                	  Var id = 0 ; // For Register
+                	  if($("#id").val() != undefined)
+                		  {
+                		     specCodeError = true;
+                		     id = $("#id").val();
+                		  }
+                	  
                 	  $.ajax({
                 		  url:'checkCode',
-                		  data:{"code":val},
+                		  data:{"code":val, "id":id},
                 		  success:function(respTxt){
                 			  if(respText != '')
                 				  {
