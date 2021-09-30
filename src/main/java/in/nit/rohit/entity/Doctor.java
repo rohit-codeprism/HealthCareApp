@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.Data;
 
@@ -29,7 +30,7 @@ public class Doctor {
 	
 	
 	@Column(name="doc_mail_col")
-	private String emailId;
+	private String email;
 	
 	@Column(name="doc_addr_col")
 	private String address;
@@ -44,16 +45,31 @@ public class Doctor {
 	@Column(name="doc_note_col")
 	private String note;
 	
+	/*
+	@Column(name="image")
+	private String photos;
 	
+	@Transient
+	private String photosImagePath;
 	
-	@Column(name="doc_img_col")
-	private String photoLoc;
+	public String getPhotosImagePath() {
+		if(photos == null || id == null)
+			return null;
+		else
+		    return "/user-photos"+id+"/"+ photos;
+	}
+	*/
 	
-	// Associate Mapping 
+	  @Column(name="doc_img_col")
+	  private String photoLoc;
+	
+	//--- Association Mapping ----
+	
 	
 	@ManyToOne
-	@JoinColumn(name="spec_key_fk_col")
+	@JoinColumn(name="spec_id_fk_col")
 	private Specialization specialization; // Has-A
+	
 	
 	
 	

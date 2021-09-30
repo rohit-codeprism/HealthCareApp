@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import in.nit.rohit.entity.Doctor;
 import in.nit.rohit.exception.DoctorNotFoundException;
 import in.nit.rohit.service.IDoctorService;
+import in.nit.rohit.service.ISpecializationService;
 
 @Controller
 @RequestMapping("/doctor")
@@ -23,13 +24,18 @@ public class DoctorController {
 	@Autowired
 	private IDoctorService service;
 	
+	@Autowired
+	private ISpecializationService specializationService;
+	
 	/***
 	 * 1. show Register page
 	 * @return
 	 */
 	@GetMapping("/register")
-	public String showDoctorRegister()
+	public String showDoctorRegister(@RequestParam(value = "message", required = false) String message, Model model)
 	{
+		model.addAttribute("message", message);
+		createDynamicUi(model);
 		return "DoctorRegister";
 	}
 	
@@ -40,12 +46,12 @@ public class DoctorController {
 	 * @return
 	 */
 	@PostMapping("/save")
-	public String saveDoctor(@ModelAttribute Doctor doctor, RedirectAttributes attributes)
+	public String saveDoctor(@ModelAttribute Doctor doctor,RedirectAttributes attributes)
 	{
 		Long id = service.saveDoctor(doctor);
 		String message = "Doctor '"+id+"' Created successfully";
 		attributes.addAttribute("message", message);
-	    return "DoctorRegister";	
+	    return "redirect:register";	
 	}
 	
 	/***
@@ -69,7 +75,7 @@ public class DoctorController {
 	 * @return
 	 */
 	@GetMapping("/delete")
-	public String deleteDoctor(@RequestParam("id") Long id, Model model,RedirectAttributes attributes)
+	public String deleteDoctor(@RequestParam("id") Long id,RedirectAttributes attributes)
 	{
 		String message = null;
 		try {
@@ -82,7 +88,7 @@ public class DoctorController {
 		}
 		
 		attributes.addAttribute("message", message);
-		    return "redirect:DoctorData";
+		    return "redirect:all";
 	}
 	
 	/***
@@ -98,6 +104,7 @@ public class DoctorController {
 		try {
 			Doctor doctor = service.getOneDoctor(id);
 			model.addAttribute("doctor",doctor);
+			createDynamicUi(model);
 			page = "DoctorEdit";	
 		}catch(DoctorNotFoundException e)
 		{
@@ -119,8 +126,16 @@ public class DoctorController {
 	public String updateDoctor(@ModelAttribute Doctor doctor,RedirectAttributes attributes)
 	{
 		service.updateDoctor(doctor);
-		attributes.addAttribute("message", doctor.getId()+",Updated");
+		attributes.addAttribute("message", doctor.getId()+"Updated Sucessfully");
 		return "redirect:all";
+	}
+	
+	/***
+	 * 6. Dynamic UI
+	 */
+	public  void createDynamicUi(Model model)
+	{
+		model.addAttribute("specializations",specializationService.getSpecIdAndName()); 
 	}
 	
 	/***

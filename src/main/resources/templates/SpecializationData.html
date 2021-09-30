@@ -27,7 +27,7 @@
                              <td th:text="${ob.specName}"></td>
                              <td th:text="${ob.specNote}"></td>
                              <td>
-                                 <a th:href="@{/spec/delete(id=${ob.id})}" class="btn btn-dander">DELETE <i class="fa fa-trash" aria-hidden="true"></i></a>
+                                 <a th:href="@{/spec/delete(id=${ob.id})}" class="btn btn-danger">DELETE <i class="fa fa-trash" aria-hidden="true"></i></a>
                                  <a th:href="@{/spec/edit/(id=${ob.id})}" class="btn btn-warning">EDIT <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                              </td>
                        </tr>

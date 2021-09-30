@@ -1,6 +1,7 @@
 package in.nit.rohit.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import in.nit.rohit.entity.Specialization;
 import in.nit.rohit.exception.SpecializationNotFoundException;
 import in.nit.rohit.repo.SpecializationRepository;
 import in.nit.rohit.service.ISpecializationService;
+import in.nit.rohit.util.myCollectionsUtil;
 import in.nit.rohit.view.SpecializationExcelView;
 
 @Service
@@ -73,6 +75,15 @@ public class SpecializationServiceImpl implements ISpecializationService {
 	public boolean isSpecCodeExistForEdit(String specCode, Long id) {
 		
 		return repo.getSpecCodeCountForEdit(specCode, id) > 0;
+	}
+
+	@Override
+	public Map<Long,String> getSpecIdAndName() {
+		
+		List<Object[]> list  = repo.getSpecIdAndName();
+		Map<Long,String> map = myCollectionsUtil.convertToMap(list) ;
+		return map;
+		
 	}
 	
 	
