@@ -132,6 +132,9 @@ public class DoctorController {
 	
 	/***
 	 * 6. Dynamic UI
+	 * A common method which sends data to create dynamic Dropdown at UI
+	 * In Register edit page 
+	 * call this method inside controller method where those returns register or edit page  
 	 */
 	public  void createDynamicUi(Model model)
 	{
