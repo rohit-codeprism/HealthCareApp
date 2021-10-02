@@ -1,0 +1,24 @@
+server:
+  port: 9090
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: root
+    url: jdbc:mysql://localhost:3306/health
+    username: root
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: guptaravi5744
+    password: 9074846282
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+      

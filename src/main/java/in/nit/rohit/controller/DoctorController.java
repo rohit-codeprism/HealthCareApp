@@ -3,6 +3,7 @@ package in.nit.rohit.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,11 +17,14 @@ import in.nit.rohit.entity.Doctor;
 import in.nit.rohit.exception.DoctorNotFoundException;
 import in.nit.rohit.service.IDoctorService;
 import in.nit.rohit.service.ISpecializationService;
+import in.nit.rohit.util.MailUtil;
 
 @Controller
 @RequestMapping("/doctor")
 public class DoctorController {
 
+	@Autowired
+	private MailUtil mailUtil;
 	@Autowired
 	private IDoctorService service;
 	
@@ -50,6 +54,16 @@ public class DoctorController {
 	{
 		Long id = service.saveDoctor(doctor);
 		String message = "Doctor '"+id+"' Created successfully";
+		if( id != null)
+		{
+			new Thread(new Runnable() {
+				public void run() {
+					mailUtil.send(doctor.getEmail(),"Success",message,new ClassPathResource("/static/myResources/Welcome_Doctor.pdf"));	
+				}
+			}).start();
+			
+		}
+		 
 		attributes.addAttribute("message", message);
 	    return "redirect:register";	
 	}
