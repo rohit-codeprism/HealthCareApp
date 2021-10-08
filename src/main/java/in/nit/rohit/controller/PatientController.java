@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import in.nit.rohit.entity.Patient;
+import in.nit.rohit.exception.PatientNotFoundException;
 import in.nit.rohit.service.IPatientService;
 
 @Controller
@@ -28,8 +30,9 @@ public class PatientController {
 	 */
 	
 	@GetMapping("/register")
-	public String showPatientRegister()
+	public String showPatientRegister(Model model)
 	{
+		model.addAttribute("patient", new Patient());
 		return "PatientRegister";
 	}
 	
@@ -43,9 +46,10 @@ public class PatientController {
 	@PostMapping("/save")
 	public String savePatient(@ModelAttribute Patient patient, Model model)
 	{
-		Integer id  = service.savePatient(patient);
-		String message = "Patient '"+id+"' created successfuly";
+		Long id  = service.savePatient(patient);
+		String message = "Patient created successfully:"+id;
 		model.addAttribute("message", message);
+		model.addAttribute("patient", new Patient());
 		return "PatientRegister";
 	}
 	
@@ -55,10 +59,11 @@ public class PatientController {
 	 * retun to SpecializationData.html
 	 */
 	@GetMapping("/all")
-	public String viewAllPatient(Model model)
+	public String viewAllPatient(Model model,@RequestParam(value = "message", required = false) String message)
 	{
 		List<Patient> list = service.getAllPatient();
 		model.addAttribute("list",list);
+		model.addAttribute("message", message);
 		return "PatientData";
 	}
 	
@@ -70,19 +75,20 @@ public class PatientController {
 	 * send it ot UI using Model 
 	 * Return back to SpcializationData.html
 	 */
-	public String deletePatient(@RequestParam Integer id, Model model)
+	@GetMapping("/delete")
+	public String deletePatient(@RequestParam Long id, RedirectAttributes attributes)
 	{
-		// get one patient
-	        service.deletePatient(id);
-		// one success message
-	        String message = "Patient '"+id+"' Deleted successfully";
-	     // send message to UI
-	        model.addAttribute("message", message);
-	     // get Latest data 
-	        List<Patient> list = service.getAllPatient();
-	        model.addAttribute("list",list);
-	        
-	        return "PatientData";
+		try {
+			service.deletePatient(id);
+			attributes.addFlashAttribute("message","Patient Deleted with id:"+id);
+			
+		}catch(PatientNotFoundException e)
+		{
+			e.printStackTrace();
+			attributes.addAttribute("message", e.getMessage());
+		}
+		return "redirect:all";
+		
 	}
 	
 	/***
@@ -91,15 +97,23 @@ public class PatientController {
 	 */
 
 	@GetMapping("/edit")
-	public String showEditPage(@RequestParam Integer id, Model model)
+	public String showEditPage(@RequestParam Long id, Model model, RedirectAttributes attributes)
 	{
-		// get one empoyee based on id from DB
-	    Patient patient = 	service.getOnePatient(id);
-	    // sent to UI
-	    model.addAttribute("patient",patient);
-	    
-	    // return to the PatientData.html page
-	    return "PatientData";
+		String page = null;
+		try {
+			Patient ob = service.getOnePatient(id);
+			model.addAttribute("patient",ob);
+			page = "PatientEdit";
+			
+		}catch(PatientNotFoundException e)
+		{
+			e.printStackTrace();
+			attributes.addAttribute("message", e.getMessage());
+			page = "redirect:all";
+		}
+		
+		
+		return page;
 		
 	}
 	
@@ -109,9 +123,11 @@ public class PatientController {
 	 * redirect  back to all
 	 */
 	
-	public String updatePatient(@ModelAttribute Patient patient)
+	@PostMapping("/update")
+	public String updatePatient(@ModelAttribute Patient patient, RedirectAttributes attributes)
 	{
 		service.savePatient(patient);
+		attributes.addAttribute("message","Patient Updated Successfully");
 		return "redirect:all";
 	}
 }

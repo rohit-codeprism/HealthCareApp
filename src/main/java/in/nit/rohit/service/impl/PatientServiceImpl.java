@@ -17,12 +17,12 @@ public class PatientServiceImpl implements IPatientService {
 	private PatientRepository repo;
 
 	@Override
-	public Integer savePatient(Patient patient) {
+	public Long savePatient(Patient patient) {
 		return repo.save(patient).getId() ;
 	}
 
 	@Override
-	public Patient getOnePatient(Integer id) {
+	public Patient getOnePatient(Long id) {
 		Optional<Patient> opt = repo.findById(id);
 		if(opt.isPresent())
 		{
@@ -39,7 +39,7 @@ public class PatientServiceImpl implements IPatientService {
 	}
 
 	@Override
-	public void deletePatient(Integer id) {
+	public void deletePatient(Long id) {
 		repo.deleteById(id);
 		
 	}

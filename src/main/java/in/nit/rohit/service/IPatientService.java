@@ -6,10 +6,10 @@ import in.nit.rohit.entity.Patient;
 
 public interface IPatientService {
 	
-	Integer savePatient(Patient patient);
-	Patient getOnePatient(Integer id);
+	Long savePatient(Patient patient);
+	Patient getOnePatient(Long id);
 	List<Patient> getAllPatient();
-	void deletePatient(Integer id);
+	void deletePatient(Long id);
 	void updatePatient(Patient patient);
 
 }
