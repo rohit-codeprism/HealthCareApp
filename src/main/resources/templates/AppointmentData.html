@@ -1,0 +1,45 @@
+<html xmlns:th="https://www.thymeleaf.org/">
+    <div th:replae="fragments/commonui :: header"></div>
+    <body>
+        <div th:replace="fragments/commonui :: menu"></div>
+        <div class="container">
+           <div class="card">
+               <div class="card-header bg-primary  text-center text-white">
+                  <h3>Appointment Data</h3>
+               </div>
+               <div class="card-body">
+                   <a th:href="@{/appointment/excel}" class="btn btn-success">Excel <i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
+                   <table class="table table-hover">
+                       <tr class="bg-info text-white">
+                           <th>ID</th>
+                           <th>Doctor</th>
+                           <th>Date</th>
+                           <th>No of Slots</th>
+                           <th>Details</th>
+                           <th>Fee</th>
+                           <th>Operation</th>
+                       </tr>
+                       <tr th:each="ob:${list}">
+                             <td th:text="${ob.id}"></td>
+                             <td>[[${ob.doctor.firstName +' '+ ob.doctor.lastName}]]</td>
+                             <td th:text="${ob.date}"></td>
+                             <td th:text="${ob.noOfSlots}"></td>
+                             <td th:text="${ob.details}"></td>
+                             <td th:text="${ob.fee}"></td>
+                             <td>
+                                 <a th:href="@{/appointment/delete(id=${ob.id})}" class="btn btn-danger">DELETE <i class="fa fa-trash" aria-hidden="true"></i></a>
+                                 <a th:href="@{/appointment/edit/(id=${ob.id})}" class="btn btn-warning">EDIT <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                             </td>
+                       </tr>
+                   </table>
+
+               </div>
+               <div class="card-footer bg-white text-success" th:if="${message != null}">
+                      <span th:text="${message}"></span>
+               </div>
+           </div>
+
+        </div>
+
+    </body>
+</html>

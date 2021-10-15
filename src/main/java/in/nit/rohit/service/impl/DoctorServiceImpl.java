@@ -1,15 +1,20 @@
 package in.nit.rohit.service.impl;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import in.nit.rohit.entity.Doctor;
+import in.nit.rohit.entity.User;
 import in.nit.rohit.exception.DoctorNotFoundException;
 import in.nit.rohit.repo.DoctorRepository;
 import in.nit.rohit.service.IDoctorService;
+import in.nit.rohit.service.IUserService;
+import in.nit.rohit.service.constant.UserRoles;
+import in.nit.rohit.util.UserUtil;
+import in.nit.rohit.util.myCollectionsUtil;
 
 @Service
 public class DoctorServiceImpl implements IDoctorService {
@@ -17,10 +22,29 @@ public class DoctorServiceImpl implements IDoctorService {
 	@Autowired
 	private DoctorRepository repo;
 	
+	@Autowired
+    private IUserService userService;
+	
+	@Autowired
+	private UserUtil util;
+	
 	@Override
 	public Long saveDoctor(Doctor doctor) {
+		Long id = repo.save(doctor).getId();
+		if(id != null)
+		{
+			User user = new User();
+			user.setDisplayName(doctor.getFirstName()+" "+doctor.getLastName());
+			user.setUsername(doctor.getEmail());
+			user.setPassword(util.getPwd());
+			user.setRole(UserRoles.DOCTOR.name());
+			userService.saveUser(user);
+			// TODO : EMail part is pending 
+			
+		}
 		
-		return repo.save(doctor).getId();
+		
+		return id;
 	}
 
 	@Override
@@ -57,6 +81,13 @@ public class DoctorServiceImpl implements IDoctorService {
 		else throw new DoctorNotFoundException(doctor.getId()+",not exist ");
 		
 		
+	}
+
+	@Override
+	public Map<Long,String> getDoctorIdAndName() {
+		List<Object[]> list = repo.getDoctorIdANdName();
+		
+		return myCollectionsUtil.convertToMapIndex(list);
 	}
 
 }

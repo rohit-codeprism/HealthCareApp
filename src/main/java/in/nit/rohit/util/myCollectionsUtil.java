@@ -44,4 +44,17 @@ public interface myCollectionsUtil {
 					ob[1].toString());
 		 */
 	}
+	
+
+	public static Map<Long, String> convertToMapIndex(List<Object[]> list )
+	{
+		Map<Long,String> map = list
+				.stream()
+				.collect(Collectors.toMap(
+						ob->Long.valueOf(ob[0].toString()),
+
+					    ob->ob[1].toString()+ob[2].toString()));
+		return map;
+	}
+		
 }

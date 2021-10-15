@@ -1,31 +1,16 @@
 package in.nit.rohit.config;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 @Configuration
-public class AppConfig implements WebMvcConfigurer{
-
-	public void addResourseHandlers(ResourceHandlerRegistry registry )
-	{
-		exposeDirectory("user-photos",registry);
-	}
+public class AppConfig {
 	
-	private void exposeDirectory(String dirName, ResourceHandlerRegistry registry  )
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder()
 	{
-		Path uploadDir = Paths.get(dirName);
-		
-		 String uploadPath = uploadDir.toFile().getAbsolutePath();
-		 
-		 if (dirName.startsWith("../")) 
-			 dirName = dirName.replace("../", "");
-		 
-		     registry.addResourceHandler("/" + dirName + "/**").addResourceLocations("file:/"+ 
-		uploadPath + "/");
-
+		return new BCryptPasswordEncoder();
 	}
-	
+
 }

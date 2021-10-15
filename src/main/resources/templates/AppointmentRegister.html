@@ -1,0 +1,91 @@
+<html xmlns:th="https://www.thymeleaf.org/">
+    <div th:replae="fragments/commonui :: header"></div>
+    <body>
+        <div th:replace="fragments/commonui :: menu"></div>
+        <div class="container">
+            <div class="card">
+                <div class="card-header bg-primary  text-center text-white">
+                   <h3>Appointment Register</h3>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/appointment/save}" method="POST" id="specForm" enctype="multipart/form-data">
+                         <!--row#0--> 
+                         <div class="row">
+                            <div class="col-2">
+                              <label for="doctor">Doctor</label>  
+                            </div>
+                            <div class="col-4">
+                               <select name="doctor.id" id="doctor" class="form-control">
+                                   <option value="">--Select--</option>
+                                   <option th:each="ob:${doctors}" th:value="${ob.key}" th:text="${ob.value}"></option>
+                               </select>
+                            </div>
+                            <div class="col-6">
+                                <span id="doctorError"></span>
+                            </div>
+                       </div> 
+                        <!--row#1--> 
+                        <div class="row">
+                            <div class="col-2">
+                              <label for="date">Date Of Appointment</label>  
+                            </div>
+                            <div class="col-4">
+                                <input type="date" name="date" id="date" class="form-control"/>
+                            </div>
+                            <div class="col-6">
+                                <span id="dateError"></span>
+                            </div>
+                       </div>
+                        <!--row#2--> 
+                        <div class="row">
+                            <div class="col-2">
+                              <label for="noOfSlots">No Of Slots</label>  
+                            </div>
+                            <div class="col-4">
+                                <input type="text" name="noOfSlots" id="noOfSlots" class="form-control"/>
+                            </div>
+                            <div class="col-6">
+                                <span id="noOfSlotsError"></span>
+                            </div>
+                        </div>
+                         <!--row#3--> 
+                        <div class="row">
+                              <div class="col-2">
+                                <label for="details">Details</label>  
+                              </div>
+                              <div class="col-4">
+                                <input type="text" name="details" id="details" class="form-control"/>
+                              </div>
+                              <div class="col-6">
+                                  <span id="detailsError"></span>
+                              </div>
+                        </div>
+                         <!--row#3-->
+                        <div class="row">
+                            <div class="col-2">
+                              <label for="fee">Amount</label>  
+                            </div>
+                            <div class="col-4">
+                              <input type="text" name="fee" id="fee" class="form-control"/>
+                            </div>
+                            <div class="col-6">
+                                <span id="feeError"></span>
+                            </div>
+                      </div> 
+
+                        <button type="submit" class="btn btn-success">Create<i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+                    </form>
+                        
+ 
+                </div>
+                <div class="card-footer bg-white text-info" th:if="${message != null}">
+                      <span th:text="${message}"></span> 
+                </div>
+            </div>
+ 
+         </div>
+
+         <script th:src="@{/myjs/uploadImgBb.js}"></script>
+    </body>
+
+</html>
