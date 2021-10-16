@@ -14,6 +14,7 @@ import in.nit.rohit.repo.PatientRepository;
 import in.nit.rohit.service.IPatientService;
 import in.nit.rohit.service.IUserService;
 import in.nit.rohit.service.constant.UserRoles;
+import in.nit.rohit.util.MailUtil;
 import in.nit.rohit.util.UserUtil;
  
 @Service
@@ -27,6 +28,9 @@ public class PatientServiceImpl implements IPatientService {
 	
 	@Autowired
 	private UserUtil util;
+	
+	@Autowired
+	private MailUtil mailUtil;
 
 	@Override
 	@Transactional
@@ -34,13 +38,24 @@ public class PatientServiceImpl implements IPatientService {
 		Long id = repo.save(patient).getId();
 		if(id != null)
 		{
+			String pwd = util.getPwd();
 			User user = new User();
 			user.setDisplayName(patient.getFirstName()+" "+patient.getLastName());
 			user.setUsername(patient.getEmail());
-			user.setPassword(util.getPwd());
+			user.setPassword(pwd);
 			user.setRole(UserRoles.PATIENT.name());
-			userService.saveUser(user); 
-			// TODO : Email part is pending 
+			Long genId = userService.saveUser(user); 
+			if(genId != null)
+				new Thread(new Runnable() {
+					public void run() {
+						 
+						 String text = "Your uesername is: "+patient.getEmail()+" And Password is:"+ pwd;
+				         mailUtil.send(patient.getEmail(), "Patient Added", text);
+						
+					}
+				}).start();
+			
+			
 		}
 		return id ;
 	} 

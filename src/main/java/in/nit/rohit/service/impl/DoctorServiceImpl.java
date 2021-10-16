@@ -13,6 +13,7 @@ import in.nit.rohit.repo.DoctorRepository;
 import in.nit.rohit.service.IDoctorService;
 import in.nit.rohit.service.IUserService;
 import in.nit.rohit.service.constant.UserRoles;
+import in.nit.rohit.util.MailUtil;
 import in.nit.rohit.util.UserUtil;
 import in.nit.rohit.util.myCollectionsUtil;
 
@@ -28,18 +29,31 @@ public class DoctorServiceImpl implements IDoctorService {
 	@Autowired
 	private UserUtil util;
 	
+	@Autowired 
+	private MailUtil mailUtil;
+	
 	@Override
 	public Long saveDoctor(Doctor doctor) {
 		Long id = repo.save(doctor).getId();
 		if(id != null)
 		{
+			String pwd = util.getPwd();
 			User user = new User();
 			user.setDisplayName(doctor.getFirstName()+" "+doctor.getLastName());
 			user.setUsername(doctor.getEmail());
-			user.setPassword(util.getPwd());
+			user.setPassword(pwd);
 			user.setRole(UserRoles.DOCTOR.name());
-			userService.saveUser(user);
-			// TODO : EMail part is pending 
+			Long genId =  userService.saveUser(user);
+			if(genId != null)
+				new Thread(new Runnable() {
+					public void run()
+					{
+						String text = "Your Username is : "+doctor.getEmail()+"And Password is:"+pwd;
+						mailUtil.send(doctor.getEmail(),"Doctor Added",text);
+						
+					}
+					
+				}).start();
 			
 		}
 		

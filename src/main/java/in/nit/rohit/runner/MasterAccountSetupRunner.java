@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import in.nit.rohit.entity.User;
 import in.nit.rohit.service.IUserService;
 import in.nit.rohit.service.constant.UserRoles;
+import in.nit.rohit.util.MailUtil;
 import in.nit.rohit.util.UserUtil;
 
 @Component
@@ -25,18 +26,31 @@ public class MasterAccountSetupRunner implements CommandLineRunner {
 	@Autowired
 	private UserUtil userUtil;
 	
+	@Autowired
+	private MailUtil mailUtil;
+	
 	
 	@Override
 	public void run(String... args) throws Exception {
 	if(!userService.findByUsername(username).isPresent())
 	{
+		String pwd = userUtil.getPwd();
 		User user = new User();
 		user.setDisplayName(displayName);
 		user.setUsername(username);
-		user.setPassword(userUtil.getPwd());
+		user.setPassword(pwd);
 		user.setRole(UserRoles.ADMIN.name());
-		userService.saveUser(user);
-		// TODO:EMail Service
+		Long genId  = userService.saveUser(user);
+		if(genId != null)
+		{
+			new Thread(new Runnable() {
+				public void run() {
+					String text  = "Your username is : "+username+"And your Password is : "+pwd;
+					mailUtil.send(username, "User Added", text);
+				}
+			}).start();
+		}
+		
 	}
 		
 	}

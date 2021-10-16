@@ -9,7 +9,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-@Configuration
+import in.nit.rohit.service.constant.UserRoles;
+
+
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter  {
 	
@@ -17,11 +19,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter  {
 	private BCryptPasswordEncoder passwordEncoder;
 	
 	@Autowired
-	private UserDetailsService userDetails;
+	private UserDetailsService userDetailsService;
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		// Authentication Object
+		auth.userDetailsService(userDetailsService)
+		.passwordEncoder(passwordEncoder);
+		
+		
 		super.configure(auth);
 	}
 	
@@ -29,13 +35,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter  {
 	protected void configure(HttpSecurity http) throws Exception {
 		
 		// Authorize URL
+		http.authorizeRequests()
+		.antMatchers("/patient/register","/patient/save").permitAll()
+		.antMatchers("/patient/all").hasAuthority(UserRoles.ADMIN.name())
+		.antMatchers("/doctor/**").hasAuthority(UserRoles.ADMIN.name())
+		//.antMatchers("/spec/**").hasAuthority(UserRoles.ADMIN.name())
+		.anyRequest().authenticated()
+		
+		.and()
+		.formLogin()
+		.defaultSuccessUrl("/spec/all",true)
+		
+		.and()
+		.logout();
 		
 		// FORM Configuration 
 		
 		// Logout details
 		
 		// exception  Handling 
-		super.configure(http);
+		 
 	}
 	
 }
