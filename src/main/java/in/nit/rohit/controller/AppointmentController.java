@@ -1,6 +1,7 @@
 package in.nit.rohit.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import in.nit.rohit.entity.Appointment;
+import in.nit.rohit.entity.Doctor;
 import in.nit.rohit.exception.AppointmentNotFoundException;
 import in.nit.rohit.service.IAppointmentService;
 import in.nit.rohit.service.IDoctorService;
+import in.nit.rohit.service.ISpecializationService;
 
 @Controller
 @RequestMapping("/appointment")
@@ -26,6 +29,9 @@ public class AppointmentController {
 	
 	@Autowired
 	private IDoctorService doctorService;
+	
+	@Autowired
+	private ISpecializationService specializationService;
 	
 	
 	private void doctorListUI(Model model)
@@ -103,5 +109,29 @@ public class AppointmentController {
 		attributes.addAttribute("message", "Appontment updated Sucessfully");
 		return "redirect:all";
 	}
+	
+	// view appointment page 
+	@GetMapping("/view")
+	public String viewSlots(@RequestParam(required = false, defaultValue="0")Long specId,  Model model) {
+		// fetch data for spec dropdown
+		Map<Long,String> specMap = specializationService.getSpecIdAndName();
+		model.addAttribute("specializations",specMap);
+		List<Doctor> docList = null;
+		String message = null;
+		if(specId <= 0) { // if they did not select any spec
+			docList = doctorService.getAllDoctors();
+			 message = "Result:All Doctors";
+		}else {
+			
+		    docList = doctorService.findDoctorBySpecId(specId);
+		    message = "Result:"+ specializationService.getOneSpecialization(specId).getSpecName();
+		}
+		
+		model.addAttribute("docList",docList);
+		model.addAttribute("message", message );
+		return "AppointmentSearch";
+	}
+	
+	//
 
 }

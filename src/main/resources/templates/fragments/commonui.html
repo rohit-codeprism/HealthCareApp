@@ -19,7 +19,8 @@
     <ul class="navbar-nav mr-auto">
      
         <!--specialization Started  -->
-        <li class="nav-item dropdown" sec:authorize="hasAuthority('ADMIN')">
+        <!-- sec:authorize="hasAuthority('ADMIN')" -->
+        <li class="nav-item dropdown" >
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                  Specialization
               </a>
@@ -30,7 +31,8 @@
        </li>
        
        <!--doctor started  -->
-        <li class="nav-item dropdown" sec:autorize="hasAuthority('ADMIN')">
+       <!-- sec:autorize="hasAuthority('ADMIN')" -->
+        <li class="nav-item dropdown" >
            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Doctor
            </a>
@@ -48,19 +50,22 @@
            </a>
            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" th:href="@{/patient/register}">Register</a>
-              <a class="dropdown-item" th:href="@{/patient/all}" sec:authorize="hasAuthority('ADMIN')">View All</a>
+              <a class="dropdown-item" th:href="@{/patient/all}" >View All</a>
+              <!-- sec:authorize="hasAuthority('ADMIN')" -->
           </div>
        </li>
         <!--patient End  -->
       
        <!--Appointment Started  -->
-      <li class="nav-item dropdown" sec:authorize="hasAuthority('ADMIN')">
+       <!-- sec:authorize="hasAuthority('ADMIN')" -->
+      <li class="nav-item dropdown" >
            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Appointment
            </a>
            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                <a class="dropdown-item" th:href="@{/appointment/register}">Register</a>
                <a class="dropdown-item" th:href="@{/appointment/all}" >View All</a>
+               <a class="dropdown-item" th:href="@{/appointment/view}" >Book</a>
           </div>
       </li>
        <!--Appointment End  -->

@@ -1,4 +1,4 @@
-package in.nit.rohit.service.impl;
+ package in.nit.rohit.service.impl;
 
 import java.util.List;
 import java.util.Map;
@@ -102,6 +102,12 @@ public class DoctorServiceImpl implements IDoctorService {
 		List<Object[]> list = repo.getDoctorIdANdName();
 		
 		return myCollectionsUtil.convertToMapIndex(list);
+	}
+
+	@Override
+	public List<Doctor> findDoctorBySpecId(Long specId) {
+		 
+		return repo.getDoctorBySpecId(specId);
 	}
 
 }

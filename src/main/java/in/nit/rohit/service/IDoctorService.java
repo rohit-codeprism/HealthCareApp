@@ -13,7 +13,9 @@ public interface IDoctorService {
 	void deleteDoctor(Long id);
 	void updateDoctor(Doctor doctor);
 	public Map<Long,String> getDoctorIdAndName();
+	public List<Doctor> findDoctorBySpecId(Long specId);
 	
 	
-
+	
+ 
 }

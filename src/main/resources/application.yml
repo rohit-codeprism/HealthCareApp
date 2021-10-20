@@ -4,7 +4,7 @@ server:
 master:
   user:
     name: NIT-Rohit
-    email: guptaravi5744@gmail.com
+    email: kumarrohit5744@gmail.com
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
