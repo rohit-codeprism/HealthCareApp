@@ -52,7 +52,7 @@
                              <td th:text="${ob.note}"></td>
                              <td th:text="${ob.specialization.specName}"></td>
                              <td>
-                                 <a th:href="@{/doctor/bookslot(id=${ob.id})}" class="btn btn-info">Book Slot <i class="fa fa-trash" aria-hidden="true"></i></a>
+                                 <a th:href="@{/appointment/viewSlot(id=${ob.id})}" class="btn btn-info">View Slot </a>
                                <!--    <a th:href="@{/doctor/edit/(id=${ob.id})}" class="btn btn-warning">EDIT <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>-->
                              </td>
                        </tr>

@@ -11,6 +11,7 @@ public interface IAppointmentService {
 	 public Appointment  getOneAppointment(Long id);
 	 public void deleteAppointment(Long id);
 	 public void updateAppointment(Appointment appointment);
+	 public List<Object[]> getAppointmentSlotByDoctorId(Long docId);
 	 
 	 
 
