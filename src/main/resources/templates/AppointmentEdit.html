@@ -27,10 +27,10 @@
                         <!--row#1--> 
                         <div class="row">
                             <div class="col-2">
-                              <label for="dateOfBirth">DateOfBirth</label>  
+                              <label for="date">Date</label>  
                             </div>
                             <div class="col-4">
-                                <input type="date" th:field="*{date}"  class="form-control"/>
+                                <input type="text" th:field="*{date}"  class="form-control datepicker" autocomplete="off" readonly/>
                             </div>
                             <div class="col-6">
                                 <span id="dateError"></span>
@@ -42,7 +42,7 @@
                               <label for="noOfSlots">No Of Slots</label>  
                             </div>
                             <div class="col-4">
-                                <input type="text" th:filed="*{noOfSlots}" class="form-control"/>
+                                <input type="text" th:field="*{noOfSlots}" class="form-control"/>
                             </div>
                             <div class="col-6">
                                 <span id="noOfSlotsError"></span>
@@ -54,7 +54,7 @@
                                 <label for="details">Details</label>  
                               </div>
                               <div class="col-4">
-                                <input type="text" th:filed="*{details}" class="form-control"/>
+                                <input type="text" th:field="*{details}" class="form-control"/>
                               </div>
                               <div class="col-6">
                                   <span id="detailsError"></span>
@@ -66,7 +66,7 @@
                               <label for="fee">Amount</label>  
                             </div>
                             <div class="col-4">
-                              <input type="text" th:filed="*{fee}" class="form-control"/>
+                              <input type="text" th:field="*{fee}" class="form-control"/>
                             </div>
                             <div class="col-6">
                                 <span id="feeError"></span>
@@ -84,6 +84,11 @@
             </div>
  
          </div>
+          <script>
+              $('.datepicker').datepicker({
+            	startDate: new Date ()
+              })
+         </script>
     </body>
 
 </html>

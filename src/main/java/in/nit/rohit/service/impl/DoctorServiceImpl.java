@@ -99,7 +99,7 @@ public class DoctorServiceImpl implements IDoctorService {
 
 	@Override
 	public Map<Long,String> getDoctorIdAndName() {
-		List<Object[]> list = repo.getDoctorIdANdName();
+		List<Object[]> list = repo.getDoctorIdAndName();
 		
 		return myCollectionsUtil.convertToMapIndex(list);
 	}
@@ -107,7 +107,13 @@ public class DoctorServiceImpl implements IDoctorService {
 	@Override
 	public List<Doctor> findDoctorBySpecId(Long specId) {
 		 
-		return repo.getDoctorBySpecId(specId);
+		return repo.findDoctorBySpecId(specId);
+	}
+
+	@Override
+	public Long getDoctorCount() {
+		
+		return repo.count();
 	}
 
 }

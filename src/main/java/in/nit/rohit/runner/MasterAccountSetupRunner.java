@@ -45,7 +45,7 @@ public class MasterAccountSetupRunner implements CommandLineRunner {
 		{
 			new Thread(new Runnable() {
 				public void run() {
-					String text  = "Your username is : "+username+"And your Password is : "+pwd;
+					String text  = "Your username is : " +username+"And your Password is : "+pwd;
 					mailUtil.send(username, "User Added", text);
 				}
 			}).start();

@@ -3,10 +3,10 @@ package in.nit.rohit.service.impl;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import in.nit.rohit.entity.Patient;
 import in.nit.rohit.entity.User;
@@ -61,7 +61,7 @@ public class PatientServiceImpl implements IPatientService {
 	} 
 
 	@Override
-	@Transactional
+	@Transactional(readOnly = true)
 	public Patient getOnePatient(Long id) {
 		Optional<Patient> opt = repo.findById(id);
 		if(opt.isPresent())
@@ -74,7 +74,7 @@ public class PatientServiceImpl implements IPatientService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(readOnly = true)
 	public List<Patient> getAllPatient() {
 		return repo.findAll();
 	}
@@ -91,6 +91,18 @@ public class PatientServiceImpl implements IPatientService {
 	public void updatePatient(Patient patient) {
 		repo.save(patient);
 		
+	}
+
+	@Override
+	public Patient getOneByEmail(String email) {
+		
+		return repo.findByEmail(email).get();
+	}
+
+	@Override
+	public Long getPatientCount() {
+		
+		return repo.count();
 	}
 
 }

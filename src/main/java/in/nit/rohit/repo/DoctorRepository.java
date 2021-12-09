@@ -10,9 +10,9 @@ import in.nit.rohit.entity.Doctor;
 public interface DoctorRepository extends JpaRepository<Doctor,Long> {
 	
 	@Query("SELECT id, firstName,lastName FROM Doctor")
-	List<Object[]> getDoctorIdANdName();
+	public List<Object[]> getDoctorIdAndName();
 	
-	@Query("SELECT doct FROM Doctor doct INNER JOIN doct.specialization as spec WHERE spec.id like :specId")
-	public List<Doctor> getDoctorBySpecId(Long specId);
+	@Query("SELECT doct FROM Doctor doct INNER JOIN doct.specialization as spec WHERE spec.id=:specId")
+	public List<Doctor> findDoctorBySpecId(Long specId);
 
 }

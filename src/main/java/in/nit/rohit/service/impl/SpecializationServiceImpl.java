@@ -85,6 +85,12 @@ public class SpecializationServiceImpl implements ISpecializationService {
 		return map;
 		
 	}
+
+	@Override
+	public Long getSpecializationCount() {
+		
+		return repo.count();
+	}
 	
 	
 	

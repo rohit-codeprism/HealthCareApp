@@ -3,6 +3,8 @@ package in.nit.rohit.service.impl;
 import java.util.Collections;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -49,10 +51,30 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
 		else
 		{
 			 User user = opt.get();
-		     return new org.springframework.security.core.userdetails.User(username,user.getPassword(), Collections.singletonList(new SimpleGrantedAuthority(user.getRole())));
+		     return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(), Collections.singletonList(new SimpleGrantedAuthority(user.getRole())));
 		}
 		
 		
+	}
+
+	
+	@Transactional
+	public void updateUserPwd(String pwd, Long userId) {
+		String encPwd =   passwordEncoder.encode(pwd);
+		repo.updateUserPwd(encPwd, userId);
+		
+	}
+
+	@Override
+	public boolean isPatEmailExist(String email) {
+		
+		return repo.getPatEmailCount(email)>0;
+	}
+ 
+	@Override
+	public boolean isPatEmailExistForEdit(String email, Long id) {
+		
+		return repo.getPatEmailCountForEdit(email, id)>0;
 	}
 
 }

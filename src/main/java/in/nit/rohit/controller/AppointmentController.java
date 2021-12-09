@@ -1,5 +1,6 @@
 package in.nit.rohit.controller;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -67,6 +68,7 @@ public class AppointmentController {
 		return "AppointmentData";
 	}
 	
+	@GetMapping("/delete")
 	public String deleteAppointment(@RequestParam("id") Long id, RedirectAttributes attributes) {
 		
 		String message = null;
@@ -136,11 +138,22 @@ public class AppointmentController {
 	@GetMapping("/viewSlot")
 	public String showSlots(@RequestParam Long id, Model model) {
 		//fetch appointments based on doctor id
-		List<Object[]> list = service.getAppointmentSlotByDoctorId(id);
+		List<Object[]> list = service.getAppointmentsByDoctorId(id);
 		model.addAttribute("list", list);
 		Doctor doc = doctorService.getOneDoctor(id);
 		model.addAttribute("message","Result showing for:"+doc.getFirstName()+" "+doc.getLastName());
 		return "AppointmentSlots";
+	}
+	
+	// Doctor can see there appointment created by admin
+	@GetMapping("/currentDoc")
+	public String getCurrentDocAppointments(
+			Model model,
+			Principal p) 
+	{
+		List<Object[]> list=service.getAppointmentsByDoctorEmail(p.getName());
+		model.addAttribute("list",list);
+		return "AppointmentForDoctor";
 	}
 
 }

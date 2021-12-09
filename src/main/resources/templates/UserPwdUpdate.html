@@ -1,0 +1,112 @@
+<html xmlns:th="https://www.thymeleaf.org/">
+    <div th:replace="fragments/commonui :: header"></div>
+    <body>
+        <div th:replace="fragments/commonui :: menu"></div>
+        <div class="container">
+            <div class="card">
+                <div class="card-header bg-primary  text-center text-white">
+                   <h3>USER NEW PASSWORD</h3>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/user/pwdupdate}" method="POST" id="pwdForm" >
+                         <!--row#0--> 
+                         <div class="row">
+                            <div class="col-2">
+                              <label for="password">New Password</label>  
+                            </div>
+                            <div class="col-4">
+                               <input type="password" name="password" id="pwd1" class="form-control" required />
+                            </div>
+                            <div class="col-6">
+                                <span id="pwd1Error"></span>
+                            </div>
+                       </div> 
+                        <!--row#1--> 
+                        <div class="row"> 
+                            <div class="col-2">
+                              <label for="password"> Re Enter Password</label>  
+                            </div>
+                            <div class="col-4">
+                                <input type="password" name="repassword" id="pwd2" class="form-control" required />
+                            </div>
+                            <div class="col-6">
+                                <span id="pwd2Error"></span>
+                            </div>
+                       </div> 
+                    
+                        <button  class="btn btn-success">Update</button>
+                    </form>
+                        
+ 
+                </div> 
+                <div class="card-footer bg-white text-success" th:if="${message!=null}">
+                    <span th:text="${message}"></span>
+                </div>
+            </div>
+ 
+        </div>
+        <script>      
+            $(document).ready(function(){
+             $("#pwd1Error").hide();
+             $("#pwd2Error").hide();
+
+             var pwd1Error = false;   
+             var pwd2Error = false;
+
+             function validate_password1(){
+                var val = $("#pwd1").val();
+                var exp = /^[A-Za-z0-9\.\-\,\_]{6,20}$/;
+                if(val == "")
+                  {
+                      $("#pwd1Error").show();
+                      $("#pwd1Error").html("**<b>New Password</b> can not be empty");
+                      $("#pwd1Error").css("color","red");
+                      pwd1Error = false;
+                  } else if(!exp.test(val))
+                  {
+                      $("#pwd1Error").show();
+                      $("#pwd1Error").html("**<b>New Password</b> Must be 6-20 Alphnumeric chars");
+                      $("#pwd1Error").css("color","red");
+                      pwd1Error = false;
+                  } 
+                  else {
+                      $("#pwd1Error").hide();
+                      pwd1Error = true;
+                  }
+                  return pwd1Error;
+             }
+             function validate_password2(){
+                 var p1 = $("#pwd1").val();
+                 var p2 = $("#pwd2").val();
+                 if(p1 != p2)
+                 {
+                    $("#pwd2Error").show();
+                    $("#pwd2Error").html("Password not matching");
+                    $("#pwd2Error").css('color','red');
+                    pwd2Error = false;
+
+                 }else{ 
+                    $("#pwd2Error").hide();
+                    pwd2Error = true;
+                 }
+                 return pwd2Error;
+             } 
+             $("#pwd1").keyup(function(){
+                 validate_password1();
+             }); 
+             $("#pwd2").keyup(function(){
+                 validate_password2();
+             });
+             $("#pwdForm").submit(function(){
+                 validate_password1();
+                 validate_password2();
+                 if(pwd1Error && pwd2Error) return true;
+                 else return false;
+
+             });
+
+            });
+        </script>
+    </body>
+
+</html>

@@ -1,14 +1,14 @@
 <html xmlns:th="https://www.thymeleaf.org/">
     <div th:replace="fragments/commonui :: header"></div>
     <body>
-        <div th:replace="fragments/commonui :: menu"></div>
+        <div th:replace="fragments/commonuser :: menu"></div>
         <div class="container">
             <div class="card">
                 <div class="card-header bg-primary  text-center text-white">
                    <h3>Patient Register</h3>
                 </div>
                 <div class="card-body">
-                    <form th:action="@{/patient/save}" method="POST" id="specForm" enctype="multipart/form-data">
+                    <form th:action="@{/patient/save}" method="POST" id="patForm" enctype="multipart/form-data">
                          <!--row#1--> 
                         <div class="row">
                             <div class="col-2">
@@ -204,7 +204,7 @@
             </div>
  
          </div>
-
+         <script th:src="@{/myjs/patient_validate.js}"></script>
     </body>
 
 </html>
