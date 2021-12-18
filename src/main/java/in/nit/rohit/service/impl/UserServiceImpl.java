@@ -66,15 +66,15 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
 	}
 
 	@Override
-	public boolean isPatEmailExist(String email) {
+	public boolean isUserEmailExist(String email) {
 		
-		return repo.getPatEmailCount(email)>0;
+		return repo.getUserEmailCount(email)>0;
 	}
  
 	@Override
-	public boolean isPatEmailExistForEdit(String email, Long id) {
+	public boolean isUserEmailExistForEdit(String email, Long id) {
 		
-		return repo.getPatEmailCountForEdit(email, id)>0;
+		return repo.getUserEmailCountForEdit(email, id)>0;
 	}
 
 }

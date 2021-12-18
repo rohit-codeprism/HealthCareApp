@@ -1,74 +1,58 @@
-$(document).ready(function(){
-              //1. hide error Section
+	$(document).ready(function(){
+           //1. hide error Section
               $("#emailError").hide();
              
               //2. define error variable 
               var emailError = false;
-
-              //3. validation function
-              function validate_patEmail(){
-                  var val = $("#email").val();
-                  var exp = /^[A-Z]{4,10}$/;
-                  if(val=='')
-                  {
-                      $("#emailError").show();
-                      $("#emailError").html("**<b>code </b> cannot be empty")
-                      $("#emailError").css('color','red');
-                      emailError = false;  
-                  }else if(!exp.test(val))
-                  {
-                      $("#emailError").show();
-                      $("#emailError").html("**<b>code </b> Must be 4-12 chars")
-                      $("#emailError").css('color','red');
-                      emaiError = false;  
-                  }
-                  else{
-                	  Var id = 0 ; // For Register
-                	  if($("#id").val() != undefined) // Edit Page 
-                		  {
-                		     emailError = true;
-                		     id = $("#id").val();
-                		  }
-                	  
-                	  $.ajax({
-                		  url:'checkEmail',
-                		  data:{"email":val, "id":id},
-                		  success:function(resTxt){
-                			  if(respText != '')
-                				  {
-                				    $("#emailError").show();
-                                    $("#emailError").html(resTxt);
-                                    $("#emailError").css('color','red');
-                                    emailError = false; 
-                				  
-                				  }else{
-                					  $("#emailError").hide();
-                                      emailError = true;
-                				  }
-                		  }
-                	  });
-                      
-                  }
-                  return emailError;
-              }
-
-            
-
-              // Link to a event 
-              $("#email").keyup(function(){
-                validate_patEmail();
-              });
-
-             
+			  
+			   //3. validate function
+            function validate_patientEmailInUserTable() {
+                var val = $("#email").val();
+                var exp = /\S+@\S+\.\S+/;
+                if(val=='') {
+                    $("#emailError").show();
+                    $("#emailError").html("*<b>Code</b> Can not be empty")
+                    $("#emailError").css('color','red');
+                    emailError = false;
+                } else if(!exp.test(val)) {
+                    $("#emailError").show();
+                    $("#emailError").html("*<b>Code</b> must be 4-12 chars only")
+                    $("#emailError").css('color','red');
+                    emailError = false;
+                } else {
+	                var id = 0; //for register
+	                if($("#id").val()!=undefined) { //edit page
+						emailError = true;
+						id = $("#id").val();
+					}
+                    $.ajax({
+						url:'/patient/checkEmail',
+						data: {"email": val,"id":id},
+						success:function(resTxt) {
+							if(resTxt!='') {
+								$("#emailError").show();
+                   				$("#emailError").html(resTxt);
+                    			$("#emailError").css('color','red');
+                    			emailError = false;
+							} else {
+								$("#emailError").hide();
+								emailError = true;
+							}
+						}
+						
+					});
+                }
+                return emailError;
+            }
 
 
-              // on submit
-              $("#patForm").submit(function(){
-                  validate_patEmail();
-                  if(emailError) return true;
-                  else return false;
+            //5. on submit
+            $("#patForm").submit(function(){
+                
+				validate_patientEmailInUserTable();
 
-
-              });
-
-             });
+                if(emailError)
+                    return true;
+                else return false;
+            });
+        });

@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import in.nit.rohit.entity.Doctor;
 import in.nit.rohit.exception.DoctorNotFoundException;
 import in.nit.rohit.service.IDoctorService;
 import in.nit.rohit.service.ISpecializationService;
+import in.nit.rohit.service.IUserService;
 import in.nit.rohit.util.MailUtil;
 
 @Controller
@@ -30,6 +32,9 @@ public class DoctorController {
 	
 	@Autowired
 	private ISpecializationService specializationService;
+	
+	@Autowired
+	private IUserService userService;
 	
 	/***
 	 * 1. show Register page
@@ -158,6 +163,18 @@ public class DoctorController {
 	/***
 	 * 6. Email and Mobile duplicate Validate(Ajax)
 	 */
+	@GetMapping("/checkEmail")
+	@ResponseBody
+	public   String validateSpecCode(@RequestParam String email,@RequestParam Long id)
+	{
+		 String message="";
+		 if(id == 0 && userService.isUserEmailExist(email)) {
+			 message = email +", already exist";
+		 }else if(id !=0 && userService.isUserEmailExistForEdit(email, id)) {
+			 message = email +",Already exist ";
+		 }
+		 return message; // this is not a view name(it is message)
+	}
 	
 	/***
 	 * 7. excel export

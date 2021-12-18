@@ -10,8 +10,8 @@ public interface IUserService {
 	Optional<User> findByUsername(String username);
 	void updateUserPwd(String pwd, Long userId);
 	
-	public boolean isPatEmailExist(String email);
-	public boolean isPatEmailExistForEdit(String email,Long id);
+	public boolean isUserEmailExist(String email);
+	public boolean isUserEmailExistForEdit(String email,Long id);
 	
 	
 	

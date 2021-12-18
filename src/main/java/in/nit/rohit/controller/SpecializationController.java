@@ -18,6 +18,7 @@ import in.nit.rohit.entity.Specialization;
 import in.nit.rohit.exception.SpecializationNotFoundException;
 import in.nit.rohit.service.ISpecializationService;
 import in.nit.rohit.view.SpecializationExcelView;
+import in.nit.rohit.view.SpecializationPdfView;
 
 @Controller
 @RequestMapping("/spec")
@@ -142,13 +143,13 @@ public class SpecializationController {
 	 */
 	@GetMapping("/checkCode")
 	@ResponseBody
-	public   String validateSpecCode(@RequestParam String specCode,@RequestParam Long id)
+	public   String validateSpecCode(@RequestParam String code,@RequestParam Long id)
 	{
 		 String message="";
-		 if(id == 0 && service.isSpecCodeExist(specCode)) {
-			 message = specCode +", already exist";
-		 }else if(id !=0 && service.isSpecCodeExistForEdit(specCode, id)) {
-			 message = specCode +",Already exist ";
+		 if(id == 0 && service.isSpecCodeExist(code)) {
+			 message = code +", already exist";
+		 }else if(id !=0 && service.isSpecCodeExistForEdit(code, id)) {
+			 message = code +",Already exist ";
 		 }
 		 return message; // this is not a view name(it is message)
 	}
@@ -167,6 +168,21 @@ public class SpecializationController {
 		m.addObject("list",list);
 		return m;
 		
+	}
+	
+	/***
+	 * 9. export to pdf
+	 */
+	@GetMapping("/pdf")
+	public ModelAndView exportToPdf() {
+		ModelAndView m = new ModelAndView();
+		m.setView(new SpecializationPdfView());
+		
+		// Read data from DB 
+	       List<Specialization> list = service.getAllSpecialization();
+	    // Send to Pdf Impl class
+		   m.addObject("list",list);
+		return m;
 	}
 
 }

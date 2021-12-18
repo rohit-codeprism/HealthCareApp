@@ -134,7 +134,7 @@ public class UserController {
 			model.addAttribute("message", "User Not Found");
 		}
 		
-		return "UserNewGenPwd";
+		return "UserNewPwdGen";
 		
 		
 	}

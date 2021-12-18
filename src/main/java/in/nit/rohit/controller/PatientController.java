@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import in.nit.rohit.entity.Patient;
 import in.nit.rohit.exception.PatientNotFoundException;
 import in.nit.rohit.service.IPatientService;
+import in.nit.rohit.service.IUserService;
 
 @Controller
 @RequestMapping("/patient")
@@ -22,6 +24,9 @@ public class PatientController {
 
 	@Autowired	
 	private IPatientService service;
+	
+	@Autowired
+	private IUserService userService;
 	
 	/***
 	 * When user enter the "/register" in address bar 
@@ -129,5 +134,19 @@ public class PatientController {
 		service.savePatient(patient);
 		attributes.addAttribute("message","Patient Updated Successfully");
 		return "redirect:all";
+	}
+	
+	
+	@GetMapping("/checkEmail")
+	@ResponseBody
+	public   String validateSpecCode(@RequestParam String email,@RequestParam Long id)
+	{
+		 String message="";
+		 if(id == 0 && userService.isUserEmailExist(email)) {
+			 message = email +", already exist";
+		 }else if(id !=0 && userService.isUserEmailExistForEdit(email, id)) {
+			 message = email +",Already exist ";
+		 }
+		 return message; // this is not a view name(it is message)
 	}
 }

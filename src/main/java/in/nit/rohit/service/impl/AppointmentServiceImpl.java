@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import in.nit.rohit.entity.Appointment;
-import in.nit.rohit.exception.AppointmentNotFoundException;
 import in.nit.rohit.repo.AppointmentRepository;
 import in.nit.rohit.service.IAppointmentService;
 

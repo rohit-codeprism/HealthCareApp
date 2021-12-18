@@ -19,10 +19,10 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
 	// While Saving the Doctor/Patient Register
 	@Query("SELECT COUNT(username) FROM User WHERE username=:email")
-	Integer getPatEmailCount(String email);
+	Integer getUserEmailCount(String email);
 	
 	// While Editing the Doctor/Patient Register
 	@Query("SELECT COUNT(username) FROM User WHERE username=:email AND id!=:id")
-	Integer getPatEmailCountForEdit(String email, Long id);
+	Integer getUserEmailCountForEdit(String email, Long id);
 	
 }
